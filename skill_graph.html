@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"group": "skill", "id": "Data Science", "label": "Data Science", "level": 0, "shape": "dot"}, {"group": "skill", "id": "Data Analysis", "label": "Data Analysis", "level": 1, "shape": "dot"}, {"group": "skill", "id": "Data Engineering", "label": "Data Engineering", "level": 1, "shape": "dot"}, {"group": "skill", "id": "Machine Learning", "label": "Machine Learning", "level": 1, "shape": "dot"}, {"group": "skill", "id": "Statistical Analysis", "label": "Statistical Analysis", "level": 2, "shape": "dot"}, {"group": "skill", "id": "Data Cleaning", "label": "Data Cleaning", "level": 2, "shape": "dot"}, {"group": "skill", "id": "Hypothesis Testing", "label": "Hypothesis Testing", "level": 3, "shape": "dot"}, {"group": "skill", "id": "Regression Analysis", "label": "Regression Analysis", "level": 3, "shape": "dot"}, {"group": "skill", "id": "Database Design", "label": "Database Design", "level": 2, "shape": "dot"}, {"group": "skill", "id": "ETL Processes", "label": "ETL Processes", "level": 2, "shape": "dot"}, {"group": "skill", "id": "Supervised Learning", "label": "Supervised Learning", "level": 2, "shape": "dot"}, {"group": "skill", "id": "Unsupervised Learning", "label": "Unsupervised Learning", "level": 2, "shape": "dot"}, {"group": "task", "id": "Analyze large datasets", "label": "Analyze large datasets", "shape": "dot"}, {"group": "task", "id": "Build predictive models", "label": "Build predictive models", "shape": "dot"}, {"group": "task", "id": "Clean datasets", "label": "Clean datasets", "shape": "dot"}, {"group": "task", "id": "Generate reports", "label": "Generate reports", "shape": "dot"}, {"group": "task", "id": "Build data pipelines", "label": "Build data pipelines", "shape": "dot"}, {"group": "task", "id": "Optimize databases", "label": "Optimize databases", "shape": "dot"}, {"group": "task", "id": "Train models", "label": "Train models", "shape": "dot"}, {"group": "task", "id": "Evaluate model performance", "label": "Evaluate model performance", "shape": "dot"}, {"group": "knowledge", "id": "Statistics", "label": "Statistics", "shape": "dot"}, {"group": "knowledge", "id": "Programming (Python/R)", "label": "Programming (Python/R)", "shape": "dot"}, {"group": "knowledge", "id": "Data Visualization Tools", "label": "Data Visualization Tools", "shape": "dot"}, {"group": "knowledge", "id": "SQL", "label": "SQL", "shape": "dot"}, {"group": "knowledge", "id": "Cloud Platforms (AWS)", "label": "Cloud Platforms (AWS)", "shape": "dot"}, {"group": "knowledge", "id": "Distributed Systems", "label": "Distributed Systems", "shape": "dot"}, {"group": "knowledge", "id": "Linear Algebra", "label": "Linear Algebra", "shape": "dot"}, {"group": "knowledge", "id": "Probability Theory", "label": "Probability Theory", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Data Science", "label": "Related to", "to": "Data Analysis"}, {"arrows": "to", "from": "Data Science", "label": "Related to", "to": "Data Engineering"}, {"arrows": "to", "from": "Data Science", "label": "Related to", "to": "Machine Learning"}, {"arrows": "to", "from": "Data Analysis", "label": "Related to", "to": "Statistical Analysis"}, {"arrows": "to", "from": "Data Analysis", "label": "Related to", "to": "Data Cleaning"}, {"arrows": "to", "from": "Statistical Analysis", "label": "Related to", "to": "Hypothesis Testing"}, {"arrows": "to", "from": "Statistical Analysis", "label": "Related to", "to": "Regression Analysis"}, {"arrows": "to", "from": "Data Science", "label": "Performs", "to": "Analyze large datasets"}, {"arrows": "to", "from": "Data Science", "label": "Performs", "to": "Build predictive models"}, {"arrows": "to", "from": "Data Analysis", "label": "Performs", "to": "Clean datasets"}, {"arrows": "to", "from": "Data Analysis", "label": "Performs", "to": "Generate reports"}, {"arrows": "to", "from": "Data Engineering", "label": "Performs", "to": "Build data pipelines"}, {"arrows": "to", "from": "Data Engineering", "label": "Performs", "to": "Optimize databases"}, {"arrows": "to", "from": "Machine Learning", "label": "Performs", "to": "Train models"}, {"arrows": "to", "from": "Machine Learning", "label": "Performs", "to": "Evaluate model performance"}, {"arrows": "to", "from": "Data Science", "label": "Requires", "to": "Statistics"}, {"arrows": "to", "from": "Data Science", "label": "Requires", "to": "Programming (Python/R)"}, {"arrows": "to", "from": "Data Analysis", "label": "Requires", "to": "Data Visualization Tools"}, {"arrows": "to", "from": "Data Analysis", "label": "Requires", "to": "SQL"}, {"arrows": "to", "from": "Data Engineering", "label": "Requires", "to": "Cloud Platforms (AWS)"}, {"arrows": "to", "from": "Data Engineering", "label": "Requires", "to": "Distributed Systems"}, {"arrows": "to", "from": "Machine Learning", "label": "Requires", "to": "Linear Algebra"}, {"arrows": "to", "from": "Machine Learning", "label": "Requires", "to": "Probability Theory"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"nodes": {"font": {"size": 14}, "scaling": {"min": 10, "max": 30}}, "edges": {"color": {"inherit": true}, "smooth": false}, "physics": {"stabilization": {"iterations": 100}}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
